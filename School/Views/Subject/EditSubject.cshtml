@@ -1,0 +1,33 @@
+﻿@model School.Models.Entities.Subjects;
+@{
+}
+
+@if (Model is null)
+{
+  <p>No SUbject Found</p>
+}
+else
+{
+
+  <h2>
+    Edit Subjects
+  </h2>
+  <form method="post" class="mt-5">
+    <div class="form-floating mt-3">
+      <input readonly type="number" class="form-control" id="SubjectId" name="SubjectId" asp-for="SubjectId" placeholder="id" />
+      <label for="SubjectId">Subject Id</label>
+      <span asp-validation-for="SubjectId"></span>
+    </div>
+    <div class="form-floating mt-3">
+      <input type="text" class="form-control" id="SubjectName" name="SubjectName" asp-for="SubjectName" placeholder="subject" />
+      <label for="SubjectName">Subject Name</label>
+      <span asp-validation-for="SubjectName"></span>
+    </div>
+    <div class="form-floating mt-3">
+      <input type="number" class="form-control" id="Credits" placeholder="Credits" asp-for="Credits" />
+      <label for="Credits">Subject Credits</label>
+    </div>
+    <button type="submit" class="btn btn-primary mt-4">Submit</button>
+  </form>
+
+}

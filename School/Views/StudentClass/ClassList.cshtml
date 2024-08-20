@@ -1,0 +1,31 @@
+﻿@model List<School.Models.Entities.StudentClass>;
+@{
+}
+
+<h2>Class List</h2>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>ClassId</th>
+      <th>Class Name</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach(var cl in Model)
+    {
+      <tr>
+        <td>@cl.ClassId</td>
+        <td>@cl.ClassName</td>
+        <td>
+          <a class="btn btn-primary" asp-controller="StudentClass" asp-action="EditClass" asp-route-classId="@cl.ClassId">Edit</a>
+        </td>
+        <td>
+          <a class="btn btn-danger delete-class--btn" type="button" asp-controller="StudentClass" asp-action="DeleteClass" asp-route-classId="@cl.ClassId">Delete</a>
+        </td>
+      </tr>
+    }
+    
+  </tbody>
+</table>

@@ -1,0 +1,39 @@
+﻿@model School.Models.TeacherViewModel
+@{
+}
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+}
+@if(Model is not null )
+{
+  <h2> Edit Teacher</h2>
+  <form method="post">
+    <div class="mt-5">
+      <label for="TeacherId" class="mb-1">Id</label>
+      <input readonly class="form-control" type="number" asp-for="Teacher.TeacherId"/>
+    </div>
+    <span asp-validation-for="Teacher.TeacherId"></span>
+  <div class="mt-3">
+    <label for="TeacherName" class="mb-1">Teacher Name</label>
+    <input class="form-control" type="text" asp-for="Teacher.TeacherName" />
+    <span asp-validation-for="Teacher.TeacherName" class="text-danger"></span>
+  </div>
+  
+  <div class="mt-3">
+    <label for="Teacher.SubjectId" class="mb-1">Select Subject</label>
+    <select class="form-select" asp-for="Teacher.SubjectId">
+      <option value="">Select Subject</option>
+      @foreach (var subject in Model.Subjects)
+      {
+        <option value="@subject.SubjectId">@subject.SubjectName</option>
+      }
+    </select>
+    <span asp-validation-for="Teacher.SubjectId" class="text-danger"></span>
+  </div>
+  <button class="btn btn-primary mt-5" type="submit">Submit</button>
+</form>
+}
+else
+{
+  <p>No Teacher Found</p>
+}

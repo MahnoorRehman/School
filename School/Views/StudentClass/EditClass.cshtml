@@ -1,0 +1,25 @@
+﻿@model School.Models.Entities.StudentClass
+@{
+}
+
+@if(Model is  not null) {
+<div class="container mt-5">
+  <h2>Add CLass</h2>
+  <form method="post">
+    <div class="form-group mt-2">
+      <label for="ClassId">ID</label>
+      <input type="number" class="form-control"  id="ClassId" for="ClassId" asp-for="ClassId" readonly />
+    </div>
+    <div class="form-group">
+      <label for="ClassName">Name</label>
+      <input type="text" class="form-control" id="Name" name="ClassName"  asp-for="ClassName">
+      <span asp-validation-for="ClassName" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary mt-5">Submit</button>
+  </form>
+</div>
+
+}
+else {
+<p>No Class Found</p>
+}

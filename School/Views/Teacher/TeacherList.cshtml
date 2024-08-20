@@ -1,0 +1,43 @@
+﻿@* @model List<School.Models.Entities.Teacher> *@
+@model School.Models.TeacherViewModel
+@{
+}
+
+@if (Model is null)
+{
+  <p>No Teacher Found</p>
+}
+else
+{
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>All Teachers</h2>
+    <a class="btn btn-primary" asp-action="AddTeacher" asp-controller="Teacher">Add New Teacher</a>
+  </div>
+  <table class="table table-striped mt-5">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Subject</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var t in Model.TeacherList)
+      {
+        <tr>
+          <td>@t.TeacherId</td>
+          <td>@t.TeacherName</td>
+          <td>@t.Subject?.SubjectName</td>
+          <td>
+            <a class="btn btn-warning" asp-controller="Teacher" asp-action="EditTeacher" asp-route-teacherId="@t.TeacherId">Edit</a>
+          </td>
+          <td>
+            <button class="btn btn-danger delete-teacher--btn" type="button" data-teacherid="@t.TeacherId">Delete</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

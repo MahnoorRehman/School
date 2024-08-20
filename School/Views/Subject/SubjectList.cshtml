@@ -1,0 +1,36 @@
+﻿@model List<School.Models.Entities.Subjects>;
+@{
+}
+
+
+
+<h2>All Students</h2>
+<table class="mt-5 table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>Subject ID</th>
+      <th>Subject Name</th>
+      <th>Credits</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var sub in Model)
+    {
+      <tr>
+        <td>@sub.SubjectId</td>
+        <td>@sub.SubjectName</td>
+        <td>@sub.Credits</td>
+        <td>
+          <a class="btn-warning btn" asp-Controller="Subject" asp-action="EditSubject" asp-route-subid="@sub.SubjectId">Edit</a>
+        </td>
+        <td >
+          <button class ="btn-danger btn delete-subject--btn" type="button" data-subid="@sub.SubjectId">Delete</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+

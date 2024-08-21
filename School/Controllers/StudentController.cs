@@ -72,6 +72,10 @@ namespace School.Controllers
 
         var gen = _context.Gender.ToList();
         ViewBag.Gen = new SelectList(gen, "GenderId", "GenderName");
+
+        var subjects = _context.Subjects.ToList();
+        ViewBag.Subjects = new SelectList(subjects, "SubjectId", "SubjectName");
+
         return View(add_student);
       }
 

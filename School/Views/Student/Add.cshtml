@@ -1,7 +1,4 @@
 ﻿@model School.Models.Entities.Students;
-@{
-  Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
 
 <div class="container mt-5">
@@ -37,14 +34,14 @@
         @foreach (var subject in ViewBag.Subjects)
         {
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="Subjects" value="@subject.Value" id="subject_@subject.Value" />
-            <label class="form-check-label" for="Subjects">
+            <input class="form-check-input" type="checkbox" name="StudentSubject" value="@subject.Value" id="subject_@subject.Value" />
+            <label class="form-check-label" for="StudentSubject">
               @subject.Text
             </label>
           </div>
         }
       </div>
-      <span asp-validation-for="Subjects" class="text-danger"></span>
+      <span asp-validation-for="StudentSubject" class="text-danger"></span>
     </div>
 
 
@@ -82,3 +79,9 @@
     <button type="submit" class="btn btn-primary mt-5">Submit</button>
   </form>
 </div>
+
+@section scripts {
+  @{
+    <partial name="_ValidationScriptsPartial"></partial>
+  }
+}

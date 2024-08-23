@@ -37,20 +37,18 @@ namespace School.Controllers
       return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Add(Students add_student, int[] Subjects)
+    public async Task<IActionResult> Add(Students add_student, int[] StudentSubject)
     {
-      
+
       if (ModelState.IsValid)
       {
         await _context.Students.AddAsync(add_student);
         await _context.SaveChangesAsync();
 
-
-
-        if (Subjects != null && Subjects.Length > 0)
+        if (StudentSubject != null && StudentSubject.Length > 0)
         {
           // Create StudentSubject entries
-          var studentSubjects = Subjects.Select(subjectId => new StudentSubject
+          var studentSubjects = StudentSubject.Select(subjectId => new StudentSubject
           {
             StudentId = add_student.StudentId,
             SubjectId = subjectId
@@ -61,8 +59,6 @@ namespace School.Controllers
           await _context.SaveChangesAsync();
         }
 
-
-        // return RedirectToAction(nameof(Index));
         return RedirectToAction("StudentList", "Student");
       }
       else
@@ -95,19 +91,27 @@ namespace School.Controllers
 
       var gen = _context.Gender.ToList();
       ViewBag.Gen = new SelectList(gen, "GenderId", "GenderName");
-      var stuId = await _context.Students.FindAsync(id);
+
+      var subjects = _context.Subjects.ToList();
+      ViewBag.Subjects = new SelectList(subjects, "SubjectId", "SubjectName");
+
+      var stuId = await _context.Students
+        .Include(s => s.StudentSubject)
+        .FirstOrDefaultAsync(s => s.StudentId == id);
+
+      // Prepare a list of selected subjects
+      var selectedSubjects = stuId.StudentSubject.Select(ss => ss.SubjectId).ToList();
+      ViewBag.SelectedSubjects = selectedSubjects;
+
       stuId.Classid = stuId.Classid.Trim();
       return View(stuId);
     }
     [HttpPost]
-    public async Task<IActionResult> EditStudent(Students students)
+    public async Task<IActionResult> EditStudent(Students students, int[] StudentSubject)
     {
-      var classes = _context.StudentClass.ToList();
-      ViewBag.Classes = new SelectList(classes, "ClassId", "ClassName");
 
-      var gen = _context.Gender.ToList();
-      ViewBag.Gen = new SelectList(gen, "GenderId", "GenderName");
-      var stu = await _context.Students.AsNoTracking().FirstOrDefaultAsync(x => x.StudentId == students.StudentId);
+      var stu = await _context.Students.Include(s=> s.StudentSubject)
+        .FirstOrDefaultAsync(x => x.StudentId == students.StudentId);
       if (stu is not null)
       {
         stu.FirstName = students.FirstName;
@@ -117,9 +121,49 @@ namespace School.Controllers
         stu.Phone = students.Phone;
         stu.Gender = students.Gender;
         stu.Classid = students.Classid;
-        _context.Students.Update(students);
         await _context.SaveChangesAsync();
+
+        // Handle Student Subjects
+        if (StudentSubject != null && StudentSubject.Length > 0)
+        {
+          // Get the existing subject IDs for the student
+          var existingSubjectIds = stu.StudentSubject.Select(ss => ss.SubjectId).ToList();
+
+          // Determine which subjects to remove
+          var subjectsToRemove = existingSubjectIds
+              .Where(existingId => !StudentSubject.Contains(existingId))
+              .ToList();
+
+          // Determine which subjects to add
+          var subjectsToAdd = StudentSubject
+              .Where(subjectId => !existingSubjectIds.Contains(subjectId))
+              .Select(subjectId => new StudentSubject
+              {
+                StudentId = students.StudentId,
+                SubjectId = subjectId
+              }).ToList();
+
+          // Remove old subjects
+          if (subjectsToRemove.Count > 0)
+          {
+            var subjectsToRemoveEntities = stu.StudentSubject
+                .Where(sss => subjectsToRemove.Contains(sss.SubjectId))
+                .ToList();
+
+            _context.StudentSubject.RemoveRange(subjectsToRemoveEntities);
+          }
+
+          // Add new subjects
+          if (subjectsToAdd.Count > 0)
+          {
+            _context.StudentSubject.AddRange(subjectsToAdd);
+          }
+
+          await _context.SaveChangesAsync();
+        }
       }
+
+
       return RedirectToAction("StudentList", "Student");
     }
     [HttpGet]

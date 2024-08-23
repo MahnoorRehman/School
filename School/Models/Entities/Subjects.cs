@@ -13,6 +13,6 @@ namespace School.Models.Entities
     public string SubjectName { get; set; }
     public int? Credits { get; set; }
     public virtual ICollection<Teacher>? teacher { get; set; }
-    public virtual ICollection<Students> Students { get; set; }
+    public virtual ICollection<StudentSubject> StudentSubject { get; set; }
   }
 }

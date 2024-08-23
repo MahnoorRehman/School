@@ -41,6 +41,6 @@ namespace School.Models.Entities
 
     //[NotMapped]
     //public SelectList StudentClasses { get; set; }
-    public virtual ICollection<Subjects> Subjects { get; set; }
+    public virtual ICollection<StudentSubject> StudentSubject { get; set; }
   }
 }

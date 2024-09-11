@@ -29,6 +29,9 @@
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Add">Add Student</a>
                 <a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="StudentList">Student List</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Level1Students">Level 1 </a>
+                <a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Level2Students">Level 2</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Level3Students">Level 3 </a>
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -77,6 +80,9 @@
   <script src="~/js/site.js" asp-append-version="true"></script>
   <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
   <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+  <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+  <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+
   @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

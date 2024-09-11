@@ -83,6 +83,27 @@ namespace School.Controllers
 
       return View(students);
     }
+
+    // get list of students according to level separately
+    [HttpGet]
+    public async Task<IActionResult> Level1Students()
+    { 
+      var level1Student = await _context.Students.Where(s=> s.Classid =="Level 1").ToListAsync();
+      return View(level1Student);
+    }
+    [HttpGet]
+    public async Task<IActionResult> Level2Students()
+    {
+      var level2Student = await _context.Students.Where(s => s.Classid == "Level 2").ToListAsync();
+      return View(level2Student);
+    }
+    [HttpGet]
+    public async Task<IActionResult> Level3Students()
+    {
+      var level3Student = await _context.Students.Where(s => s.Classid == "Level 3").ToListAsync();
+      return View(level3Student);
+    }
+
     [HttpGet]
     public async Task<IActionResult> EditStudent(int id)
     {
@@ -110,8 +131,28 @@ namespace School.Controllers
     public async Task<IActionResult> EditStudent(Students students, int[] StudentSubject)
     {
 
-      var stu = await _context.Students.Include(s=> s.StudentSubject)
+      var stu = await _context.Students.Include(s => s.StudentSubject)
         .FirstOrDefaultAsync(x => x.StudentId == students.StudentId);
+      if(!ModelState.IsValid)
+      {
+        var classes = _context.StudentClass.ToList();
+        ViewBag.Classes = new SelectList(classes, "ClassId", "ClassName");
+
+        var gen = _context.Gender.ToList();
+        ViewBag.Gen = new SelectList(gen, "GenderId", "GenderName");
+
+        var subjects = _context.Subjects.ToList();
+        ViewBag.Subjects = new SelectList(subjects, "SubjectId", "SubjectName");
+
+        var stuId = await _context.Students
+        .Include(s => s.StudentSubject)
+        .FirstOrDefaultAsync(s => s.StudentId == students.StudentId);
+
+      // Prepare a list of selected subjects
+      var selectedSubjects = stuId.StudentSubject.Select(ss => ss.SubjectId).ToList();
+      ViewBag.SelectedSubjects = selectedSubjects;
+        return View(students);
+      }
       if (stu is not null)
       {
         stu.FirstName = students.FirstName;
@@ -169,9 +210,13 @@ namespace School.Controllers
     [HttpGet]
     public async Task<IActionResult> DeleteStudent(int id)
     {
-      var del_student = await _context.Students.FindAsync(id);
+      var del_student = await _context.Students.Include(s => s.StudentSubject).FirstOrDefaultAsync(i => i.StudentId == id);
       if (del_student is not null)
       {
+        if (del_student.StudentSubject.Any())
+        {
+          _context.StudentSubject.RemoveRange(del_student.StudentSubject);
+        }
         _context.Students.Remove(del_student);
         await _context.SaveChangesAsync();
       }

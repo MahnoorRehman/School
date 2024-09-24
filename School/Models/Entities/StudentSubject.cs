@@ -6,13 +6,14 @@ namespace School.Models.Entities
   public class StudentSubject
   {
 
-        //public StudentSubject(int StuId, int SubId)
-        //{
-        //    this.StudentId = StuId;
-        //    this.SubjectId = SubId;
-        //}
+    //public StudentSubject(int StuId, int SubId)
+    //{
+    //    this.StudentId = StuId;
+    //    this.SubjectId = SubId;
+    //}
 
-        [Required]
+    [Required]
+    [Key]
     public int StudentId { get; set; }
     [ForeignKey("StudentId")]
     public Students Students { get; set; }

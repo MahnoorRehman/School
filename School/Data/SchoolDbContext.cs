@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using School.Models.Entities;
 
 namespace School.Data
@@ -23,10 +24,10 @@ namespace School.Data
       //  .WithOne(s => s.teacher)
       //  .HasForeignKey<Teacher>(i => i.SubjectId);
 
-      modelBuilder.Entity<StudentSubject>()
-        .HasKey(ss => new { ss.StudentId, ss.SubjectId });
+     
 
-      base.OnModelCreating(modelBuilder);
     }
   }
+
+ 
 }

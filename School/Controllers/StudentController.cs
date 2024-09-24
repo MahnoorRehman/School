@@ -58,8 +58,20 @@ namespace School.Controllers
           await _context.StudentSubject.AddRangeAsync(studentSubjects);
           await _context.SaveChangesAsync();
         }
+        switch (add_student.Classid)
+        {
+          case "Level 1":
+            return RedirectToAction("Level1Students", "Student");
+          case "Level 2":
+            return RedirectToAction("Level2Students", "Student");
+          case "Level 3":
+            return RedirectToAction("Level3Students", "Student");
 
-        return RedirectToAction("StudentList", "Student");
+          default:
+            return RedirectToAction("StudentList", "Student");
+
+        }
+
       }
       else
       {
@@ -87,8 +99,8 @@ namespace School.Controllers
     // get list of students according to level separately
     [HttpGet]
     public async Task<IActionResult> Level1Students()
-    { 
-      var level1Student = await _context.Students.Where(s=> s.Classid =="Level 1").ToListAsync();
+    {
+      var level1Student = await _context.Students.Where(s => s.Classid == "Level 1").ToListAsync();
       return View(level1Student);
     }
     [HttpGet]
@@ -133,7 +145,7 @@ namespace School.Controllers
 
       var stu = await _context.Students.Include(s => s.StudentSubject)
         .FirstOrDefaultAsync(x => x.StudentId == students.StudentId);
-      if(!ModelState.IsValid)
+      if (!ModelState.IsValid)
       {
         var classes = _context.StudentClass.ToList();
         ViewBag.Classes = new SelectList(classes, "ClassId", "ClassName");
@@ -148,9 +160,9 @@ namespace School.Controllers
         .Include(s => s.StudentSubject)
         .FirstOrDefaultAsync(s => s.StudentId == students.StudentId);
 
-      // Prepare a list of selected subjects
-      var selectedSubjects = stuId.StudentSubject.Select(ss => ss.SubjectId).ToList();
-      ViewBag.SelectedSubjects = selectedSubjects;
+        // Prepare a list of selected subjects
+        var selectedSubjects = stuId.StudentSubject.Select(ss => ss.SubjectId).ToList();
+        ViewBag.SelectedSubjects = selectedSubjects;
         return View(students);
       }
       if (stu is not null)
@@ -204,8 +216,19 @@ namespace School.Controllers
         }
       }
 
+      switch (stu.Classid)
+      {
+        case "Level 1":
+          return RedirectToAction("Level1Students", "Student");
+        case "Level 2":
+          return RedirectToAction("Level2Students", "Student");
+        case "Level 3":
+          return RedirectToAction("Level3Students", "Student");
 
-      return RedirectToAction("StudentList", "Student");
+        default:
+          return RedirectToAction("StudentList", "Student");
+
+      }
     }
     [HttpGet]
     public async Task<IActionResult> DeleteStudent(int id)
